@@ -18,6 +18,11 @@ public class StudentController {
     @Autowired
     StudentRepository studentRepository;
 
+    @RequestMapping(path = "/", method = RequestMethod.GET)
+    public List<Student>getAllPeeps() {
+        System.out.println("see this is a get");
+        return (List) studentRepository.findAll();
+    }
 
     @RequestMapping(path = "/students", method = RequestMethod.GET)
     public List<Student>getAllstudents() {
@@ -36,8 +41,8 @@ public class StudentController {
     @RequestMapping(path = "/students", method = RequestMethod.PUT)
     public void putstudent(@RequestBody Student student) {
         studentRepository.save(student);
-
     }
+
 
     @RequestMapping(path = "/students/{id}", method = RequestMethod.DELETE)
     public void deletestudent(@PathVariable ("id") int id ) {
