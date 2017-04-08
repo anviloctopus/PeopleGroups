@@ -1,9 +1,15 @@
 package com.novauc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.List;
 import java.util.Scanner;
@@ -57,6 +63,15 @@ public class StudentController {
     @RequestMapping(path = "/gender/{gender}", method = RequestMethod.GET)
     public List<Student> getAllFemales(@PathVariable ("gender") String gender ) {
         return studentRepository.findByGender(gender);
+    }
+    @RequestMapping(path="/logout", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request, HttpServletResponse response){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        request.setAttribute("logout", "logout");
+        return "login";
     }
 
 
